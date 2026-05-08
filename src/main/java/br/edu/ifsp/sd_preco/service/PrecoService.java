@@ -1,6 +1,7 @@
 package br.edu.ifsp.sd_preco.service;
 
 import br.edu.ifsp.sd_preco.dto.PrecoResponseDTO;
+import br.edu.ifsp.sd_preco.exception.PrecoNotFoundException;
 import br.edu.ifsp.sd_preco.model.Preco;
 import br.edu.ifsp.sd_preco.repository.PrecoRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ public class PrecoService {
 
     public PrecoResponseDTO getPreco(Long id) {
         Preco preco = precoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Preço não encontrado para o produto id=" + id));
+                .orElseThrow(() -> new PrecoNotFoundException(id));
 
         return new PrecoResponseDTO(preco.getProdutoId(), preco.getValor());
     }
