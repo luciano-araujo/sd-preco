@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -39,7 +40,12 @@ public class PrecoRepository {
         );
 
         this.precos = lista.stream()
-                .collect(Collectors.toMap(Preco::getProdutoId, Function.identity()));
+                .collect(Collectors.toMap(
+                        Preco::getProdutoId,
+                        Function.identity(),
+                        (v1, v2) -> v1,
+                        ConcurrentHashMap::new
+                ));
     }
 
     public Optional<Preco> findById(Long id) {
@@ -50,5 +56,13 @@ public class PrecoRepository {
         return ids.stream()
                 .filter(precos::containsKey)
                 .collect(Collectors.toMap(Function.identity(), precos::get));
+    }
+
+    public void save(Preco preco) {
+        precos.put(preco.getProdutoId(), preco);
+    }
+
+    public void deleteById(Long id) {
+        precos.remove(id);
     }
 }
