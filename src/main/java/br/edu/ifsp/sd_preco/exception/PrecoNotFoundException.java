@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Slf4j
-@ResponseStatus(HttpStatus.NOT_FOUND) // faz o Spring retornar 404 automaticamente
+@ResponseStatus(HttpStatus.NOT_FOUND)
 public class PrecoNotFoundException extends RuntimeException {
     public PrecoNotFoundException(Long id) {
         super("Preço não encontrado para o produto id=" + id);
